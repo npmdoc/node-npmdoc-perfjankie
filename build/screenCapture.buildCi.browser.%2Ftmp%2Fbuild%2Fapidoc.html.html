@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/axemclion/perfjankie#readme"
-
-    >perfjankie (v2.1.2)</a>
+    <a href="https://github.com/axemclion/perfjankie#readme">perfjankie (v2.1.2)</a>
 </h1>
 <h4>Browser Performance regression suite</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.perfjankie">module perfjankie</a><ol>
 
@@ -388,18 +381,18 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">perfjankie = function (config) {
-	var options = require(&#x27;./options&#x27;)(config),
+	var options = require('./options')(config),
 		log = options.log,
 		cb = options.callback;
 
-	log.info(&#x27;Starting PerfJankie&#x27;);
+	log.info('Starting PerfJankie');
 
 	init(config).then(function() {
 		return runTests(config);
 	}).then(function() {
 		return Q.allSettled([site(config), views(config)]);
 	}).then(function(res) {
-		log.debug(&#x27;Successfully done all tasks&#x27;);
+		log.debug('Successfully done all tasks');
 		cb(null, res);
 	}, function(err) {
 		log.debug(err);
@@ -419,17 +412,17 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">couchData = function (config, data) {
-    var server = require(&#x27;./utils&#x27;).getCouchDB(config.couch),
-        Q = require(&#x27;q&#x27;),
+    var server = require('./utils').getCouchDB(config.couch),
+        Q = require('q'),
         dfd = Q.defer();
 
     var db = null,
         log = config.log;
 
     db = server.use(config.couch.database);
-    log.debug(&#x27;Saving data&#x27;);
+    log.debug('Saving data');
 
-    if (typeof data === &#x27;undefined&#x27;) {
+    if (typeof data === 'undefined') {
         return;
     }
 
@@ -444,10 +437,10 @@
                 browser: val._browser || val._browserName,
                 run: config.run || config.time,
                 time: config.time,
-                type: &#x27;perfData&#x27;
+                type: 'perfData'
             };
             for (var key in res.data) {
-                if (key.indexOf(&#x27;_&#x27;) === 0) {
+                if (key.indexOf('_') === 0) {
                     res.meta[key] = res.data[key];
                     delete res.data[key];
                 }
@@ -457,7 +450,7 @@
     }, {
         new_edits: true
     }, function (err, res) {
-        log.debug(&#x27;Got result back after saving data&#x27;);
+        log.debug('Got result back after saving data');
         err ? dfd.reject(err) : dfd.resolve(res);
     });
 
@@ -477,39 +470,39 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">couchSite = function (config) {
 
-    var Q = require(&#x27;q&#x27;);
+    var Q = require('q');
 
     if (!config.couch.updateSite) {
         return Q(1); // jshint ignore:line
     }
 
-    var path = require(&#x27;path&#x27;),
+    var path = require('path'),
         log = config.log;
 
-    var siteDest = path.join(__dirname, &#x27;../bin-site&#x27;),
-        server = require(&#x27;./utils&#x27;).getCouchDB(config.couch),
+    var siteDest = path.join(__dirname, '../bin-site'),
+        server = require('./utils').getCouchDB(config.couch),
         db = server.use(config.couch.database);
 
-    var mime = require(&#x27;./mime&#x27;);
+    var mime = require('./mime');
 
     function contentType(filename) {
         var contentType = path.extname(filename);
-        if (contentType.length &#x3e; 0) {
+        if (contentType.length &gt; 0) {
             return mime[contentType.substring(1)];
         } else {
-            return &#x27;text&#x27;;
+            return 'text';
         }
     }
 
     function readFileContents(files, siteDest) {
-        var fs = require(&#x27;fs&#x27;),
-            path = require(&#x27;path&#x27;);
+        var fs = require('fs'),
+            path = require('path');
 
         var dfd = Q.defer();
         var fileContents = [];
 
         (function readFile(i) {
-            if (i &#x3c; files.length) {
+            if (i &lt; files.length) {
                 fs.readFile(path.join(siteDest, files[i]), function (err, data) {
                     if (!err) {
                         fileContents.push({
@@ -522,7 +515,7 @@
                     readFile(i + 1);
                 });
             } else {
-                log.debug(&#x27;Completed reading all files&#x27;);
+                log.debug('Completed reading all files');
                 dfd.resolve(fileContents);
             }
         }(0));
@@ -532,9 +525,9 @@
 
     function removeSite() {
         var dfd = Q.defer();
-        db.get(&#x27;_design/site&#x27;, function (err, res) {
+        db.get('_design/site', function (err, res) {
             if (!err) {
-                db.destroy(&#x27;_design/site&#x27;, res._rev, function (err, res) {
+                db.destroy('_design/site', res._rev, function (err, res) {
                     if (err) {
                         dfd.reject(err);
                     } else {
@@ -549,17 +542,17 @@
     }
 
     return removeSite().then(function () {
-        return Q.nfcall(require(&#x27;glob&#x27;), &#x27;**/*.*&#x27;, {
+        return Q.nfcall(require('glob'), '**/*.*', {
             cwd: siteDest
         });
     }).then(function (files) {
         return readFileContents(files, siteDest);
     }).then(function (fileContents) {
-        return Q.ninvoke(db.multipart, &#x27;insert&#x27;, {}, fileContents, &#x27;_design/site&#x27;);
+        return Q.ninvoke(db.multipart, 'insert', {}, fileContents, '_design/site');
     }).then(function () {
-        var link = url.parse([config.couch.server, config.couch.database, &#x27;_design/site/index.html&#x27;].join(&#x27;/&#x27;));
+        var link = url.parse([config.couch.server, config.couch.database, '_design/site/index.html'].join('/'));
         link.auth = null;
-        log.info(&#x27;Site Updated. View graphs at &#x27; + url.format(link));
+        log.info('Site Updated. View graphs at ' + url.format(link));
     });
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -580,7 +573,7 @@
     }
 
     var log = config.log,
-        server = require(&#x27;./utils&#x27;).getCouchDB(config.couch),
+        server = require('./utils').getCouchDB(config.couch),
         db = server.use(config.couch.database);
 
     return uploadViews(db, log);
@@ -598,21 +591,21 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">init = function (config) {
-    var Q = require(&#x27;q&#x27;),
-        server = require(&#x27;./utils&#x27;).getCouchDB(config.couch),
+    var Q = require('q'),
+        server = require('./utils').getCouchDB(config.couch),
         log = config.log;
 
-    log.debug(&#x27;Trying to see if the database exists&#x27;);
+    log.debug('Trying to see if the database exists');
 
-    return Q.ninvoke(server.db, &#x27;get&#x27;, config.couch.database).catch(function (err) {
-        log.debug(&#x27;Could not find database: %s\nCreating a new database %s&#x27;, err.reason, config.couch.database);
-        return Q.ninvoke(server.db, &#x27;create&#x27;, config.couch.database);
+    return Q.ninvoke(server.db, 'get', config.couch.database).catch(function (err) {
+        log.debug('Could not find database: %s\nCreating a new database %s', err.reason, config.couch.database);
+        return Q.ninvoke(server.db, 'create', config.couch.database);
     }).then(function () {
         var db = server.use(config.couch.database);
-        return Q.ninvoke(db, &#x27;get&#x27;, &#x27;version&#x27;).catch(function (err) {
-            return Q.ninvoke(db, &#x27;insert&#x27;, {
-                version: require(&#x27;../package.json&#x27;).dbVersion
-            }, &#x27;version&#x27;);
+        return Q.ninvoke(db, 'get', 'version').catch(function (err) {
+            return Q.ninvoke(db, 'insert', {
+                version: require('../package.json').dbVersion
+            }, 'version');
         });
     });
 }</pre></li>
@@ -629,19 +622,19 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">metricsgen = function (grunt) {
-	grunt.registerMultiTask(&#x27;metricsgen&#x27;, &#x27;Generates the names of metrics&#x27;, function() {
+	grunt.registerMultiTask('metricsgen', 'Generates the names of metrics', function() {
 		var apiDocs = new browserPerf.docs();
 		var regex = /(_avg|_max|_count)$/;
 		var doc = {};
 
 		for (var key in apiDocs.metrics) {
 			var modifier = null;
-			if (apiDocs.metrics[key].source === &#x27;TimelineMetrics&#x27; &#x26;&#x26; key.match(regex)) {
-				var idx = key.lastIndexOf(&#x27;_&#x27;);
+			if (apiDocs.metrics[key].source === 'TimelineMetrics' &amp;&amp; key.match(regex)) {
+				var idx = key.lastIndexOf('_');
 				modifier = key.substr(idx + 1);
 				key = key.substr(0, idx);
 			}
-			if (typeof doc[key] === &#x27;undefined&#x27;) {
+			if (typeof doc[key] === 'undefined') {
 				doc[key] = apiDocs.metrics[key] || {};
 				doc[key].stats = [];
 			}
@@ -657,7 +650,7 @@
 		}
 
 		this.files.forEach(function(file) {
-			grunt.file.write(file.dest, [&#x27;var METRICS_LIST =&#x27;, JSON.stringify(metrics)].join(&#x27;&#x27;));
+			grunt.file.write(file.dest, ['var METRICS_LIST =', JSON.stringify(metrics)].join(''));
 		});
 	});
 }</pre></li>
@@ -677,7 +670,7 @@
 	var log = config.log;
 
 	return utility.forEachDoc(oldDb, newDb, function(doc) {
-		if (doc.type !== &#x27;perfData&#x27;) {
+		if (doc.type !== 'perfData') {
 			return null;
 		}
 		delete doc._id;
@@ -690,8 +683,8 @@
 		}
 
 		doc.data[events[0]] = 0;
-		for (var i = 1; i &#x3c; events.length; i++) {
-			if (typeof doc.data[events[i]] === &#x27;undefined&#x27;) {
+		for (var i = 1; i &lt; events.length; i++) {
+			if (typeof doc.data[events[i]] === 'undefined') {
 				doc.data[events[i]] = 0;
 			}
 			doc.data[events[i]] = doc.data[events[i]] + doc.data[events[i - 1]];
@@ -716,17 +709,17 @@
 	var log = config.log;
 
 	return utility.forEachDoc(oldDb, newDb, function(doc) {
-		if (doc.type !== &#x27;perfData&#x27;) {
+		if (doc.type !== 'perfData') {
 			return null;
 		}
 		delete doc._id;
 		delete doc._rev;
 
 		for (var key in doc.data) {
-			if (typeof doc.data.mean_frame_time === &#x27;number&#x27;) { // From TracingMetrics
+			if (typeof doc.data.mean_frame_time === 'number') { // From TracingMetrics
 				doc.data.frames_per_sec = 1000 / doc.data.mean_frame_time;
 			}
-			if (typeof doc.data.meanFrameTime === &#x27;number&#x27;) { // from RAF
+			if (typeof doc.data.meanFrameTime === 'number') { // from RAF
 				doc.data.framesPerSec_raf = 1000 / doc.data.meanFrameTime;
 
 			}
@@ -751,7 +744,7 @@
 	var log = config.log;
 
 	return utility.forEachDoc(oldDb, newDb, function(doc) {
-		if (doc.type !== &#x27;perfData&#x27;) {
+		if (doc.type !== 'perfData') {
 			return null;
 		}
 		delete doc._id;
@@ -761,17 +754,17 @@
 
 		var metrics = new Metrics(doc.data);
 
-		metrics.addMetric(&#x27;loadTime&#x27;, &#x27;loadEventEnd&#x27;, &#x27;fetchStart&#x27;);
-		metrics.addMetric(&#x27;domReadyTime&#x27;, &#x27;domComplete&#x27;, &#x27;domInteractive&#x27;);
-		metrics.addMetric(&#x27;readyStart&#x27;, &#x27;fetchStart&#x27;, &#x27;navigationStart&#x27;);
-		metrics.addMetric(&#x27;redirectTime&#x27;, &#x27;redirectEnd&#x27;, &#x27;redirectStart&#x27;);
-		metrics.addMetric(&#x27;appcacheTime&#x27;, &#x27;domainLookupStart&#x27;, &#x27;fetchStart&#x27;);
-		metrics.addMetric(&#x27;unloadEventTime&#x27;, &#x27;unloadEventEnd&#x27;, &#x27;unloadEventStart&#x27;);
-		metrics.addMetric(&#x27;domainLookupTime&#x27;, &#x27;domainLookupEnd&#x27;, &#x27;domainLookupStart&#x27;);
-		metrics.addMetric(&#x27;connectTime&#x27;, &#x27;connectEnd&#x27;, &#x27;connectStart&#x27;);
-		metrics.addMetric(&#x27;requestTime&#x27;, &#x27;responseEnd&#x27;, &#x27;requestStart&#x27;);
-		metrics.addMetric(&#x27;initDomTreeTime&#x27;, &#x27;domInteractive&#x27;, &#x27;responseEnd&#x27;);
-		metrics.addMetric(&#x27;loadEventTime&#x27;, &#x27;loadEventEnd&#x27;, &#x27;loadEventStart&#x27;);
+		metrics.addMetric('loadTime', 'loadEventEnd', 'fetchStart');
+		metrics.addMetric('domReadyTime', 'domComplete', 'domInteractive');
+		metrics.addMetric('readyStart', 'fetchStart', 'navigationStart');
+		metrics.addMetric('redirectTime', 'redirectEnd', 'redirectStart');
+		metrics.addMetric('appcacheTime', 'domainLookupStart', 'fetchStart');
+		metrics.addMetric('unloadEventTime', 'unloadEventEnd', 'unloadEventStart');
+		metrics.addMetric('domainLookupTime', 'domainLookupEnd', 'domainLookupStart');
+		metrics.addMetric('connectTime', 'connectEnd', 'connectStart');
+		metrics.addMetric('requestTime', 'responseEnd', 'requestStart');
+		metrics.addMetric('initDomTreeTime', 'domInteractive', 'responseEnd');
+		metrics.addMetric('loadEventTime', 'loadEventEnd', 'loadEventStart');
 
 		return doc;
 	});
@@ -792,14 +785,14 @@
 	var noop = function() {};
 	config.log = config.log || config.logger || noop;
 
-	if (typeof config.log === &#x27;function&#x27;) {
+	if (typeof config.log === 'function') {
 		config.log = {
-			&#x27;fatal&#x27;: config.log,
-			&#x27;error&#x27;: config.log,
-			&#x27;warn&#x27;: config.log,
-			&#x27;info&#x27;: config.log,
-			&#x27;debug&#x27;: config.log,
-			&#x27;trace&#x27;: config.log
+			'fatal': config.log,
+			'error': config.log,
+			'warn': config.log,
+			'info': config.log,
+			'debug': config.log,
+			'trace': config.log
 		};
 	}
 
@@ -809,32 +802,32 @@
 		}
 	}
 	config.selenium = config.selenium || {
-		hostname: &#x27;localhost&#x27;,
+		hostname: 'localhost',
 		port: 4444
 	};
 	config.repeat = config.repeat || 1;
 	config.name = config.name || config.url;
-	config.suite = config.suite || &#x27;Default Test Suite&#x27;;
+	config.suite = config.suite || 'Default Test Suite';
 
-	if (typeof config.callback !== &#x27;function&#x27;) {
+	if (typeof config.callback !== 'function') {
 		config.callback = noop;
 	}
 
-	if (typeof config.couch === &#x27;undefined&#x27;) {
+	if (typeof config.couch === 'undefined') {
 		config.couch = {};
 	}
 
-	if (typeof config.couch.username !== &#x27;undefined&#x27;) {
-		var url = require(&#x27;url&#x27;);
+	if (typeof config.couch.username !== 'undefined') {
+		var url = require('url');
 		var href = url.parse(config.couch.server);
-		href.auth = config.couch.username + &#x27;:&#x27; + config.couch.pwd;
+		href.auth = config.couch.username + ':' + config.couch.pwd;
 		config.couch.server = url.format(href);
 	}
-	assert(typeof config.couch.server !== &#x27;undefined&#x27;, &#x27;Location to save results is not defined. Please define a couchDB server&#x27;);
+	assert(typeof config.couch.server !== 'undefined', 'Location to save results is not defined. Please define a couchDB server');
 
 	config.couch.database = config.couch.db || config.couch.database;
-	assert(typeof config.couch.server !== &#x27;undefined&#x27;, &#x27;Location to save results is not defined. Please define a Database to save the
- results&#x27;);
+	assert(typeof config.couch.server !== 'undefined', 'Location to save results is not defined. Please define a Database to save the
+ results');
 	return config;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
@@ -842,9 +835,9 @@
 
 
 module.exports = function(grunt) {
-grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance test cases&#x27;, function() {
+grunt.registerMultiTask('perfjankie', 'Run rendering performance test cases', function() {
   var done = this.async(),
-    path = require(&#x27;path&#x27;),
+    path = require('path'),
     options = this.<span class="apidocCodeKeywordSpan">options</span>({
       log: { // Expects the following methods,
         fatal: grunt.fail.fatal.bind(grunt.fail),
@@ -866,21 +859,21 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">perfTests = function (config) {
-	var Q = require(&#x27;q&#x27;),
+	var Q = require('q'),
 		dfd = Q.defer();
 
 	if (config.couch.onlyUpdateSite) {
 		dfd.resolve();
 	} else {
-		var browserPerf = config.browserPerf || require(&#x27;browser-perf&#x27;),
+		var browserPerf = config.browserPerf || require('browser-perf'),
 			log = config.log;
 
-		log.debug(&#x27;Starting Browser Perf&#x27;);
+		log.debug('Starting Browser Perf');
 		browserPerf(config.url, function(err, results) {
 			if (err) {
 				dfd.reject(err);
 			} else {
-				log.debug(&#x27;Got Browser Perf results back, now saving the results&#x27;);
+				log.debug('Got Browser Perf results back, now saving the results');
 				dfd.resolve(results);
 			}
 		}, {
@@ -912,9 +905,9 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">task = function (grunt) {
-  grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance test cases&#x27;, function() {
+  grunt.registerMultiTask('perfjankie', 'Run rendering performance test cases', function() {
     var done = this.async(),
-      path = require(&#x27;path&#x27;),
+      path = require('path'),
       options = this.options({
         log: { // Expects the following methods,
           fatal: grunt.fail.fatal.bind(grunt.fail),
@@ -930,16 +923,16 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
 
     options.time = parseFloat(options.time, 10);
     if (options.sauceTunnel) {
-      var SauceTunnel = require(&#x27;sauce-tunnel&#x27;);
-      grunt.log.writeln(&#x27;Starting Saucelabs Tunnel&#x27;);
+      var SauceTunnel = require('sauce-tunnel');
+      grunt.log.writeln('Starting Saucelabs Tunnel');
       var tunnel = new SauceTunnel(options.SAUCE_USERNAME, options.SAUCE_ACCESSKEY, options.sauceTunnel, true);
       tunnel.start(function(status) {
-        grunt.log.ok(&#x27;Saucelabs Tunnel started - &#x27; + status);
+        grunt.log.ok('Saucelabs Tunnel started - ' + status);
         if (status === false) {
           done(false);
         } else {
           runPerfTest(files, options, function(res) {
-            grunt.verbose.writeln(&#x27;All perf tests completed&#x27;);
+            grunt.verbose.writeln('All perf tests completed');
             tunnel.stop(function() {
               done(res);
             });
@@ -951,23 +944,23 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
     }
   });
 
-  var perfjankie = require(&#x27;..&#x27;);
+  var perfjankie = require('..');
 
   var runPerfTest = function(files, options, cb) {
     var success = true;
     (function runTest(i) {
-      if (i &#x3c; files.length) {
-        grunt.log.writeln(&#x27;Testing File &#x27;, files[i]);
+      if (i &lt; files.length) {
+        grunt.log.writeln('Testing File ', files[i]);
         var config = {
           url: files[i],
-          name: files[i].replace(/(\S)*\/|\.html$/gi, &#x27;&#x27;),
+          name: files[i].replace(/(\S)*\/|\.html$/gi, ''),
           callback: function(err, res) {
             if (err) {
               success = false;
               console.log(res);
               grunt.log.warn(err);
             } else {
-              grunt.log.ok(&#x27;Saved performance metrics&#x27;);
+              grunt.log.ok('Saved performance metrics');
             }
             runTest(i + 1);
           }
@@ -999,13 +992,13 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 
-log.debug(&#x27;Starting to upload views&#x27;);
+log.debug('Starting to upload views');
 (function uploadView(i) {
-    if (i &#x3c; views.length) {
-        log.debug(&#x27;Checking View &#x27; + views[i]);
-        var view = JSON.parse(JSON.stringify(eval(&#x27;_x_ = &#x27; + fs.readFileSync(views[i], &#x27;utf-8&#x27;)), function (
+    if (i &lt; views.length) {
+        log.debug('Checking View ' + views[i]);
+        var view = JSON.parse(JSON.stringify(eval('_x_ = ' + fs.readFileSync(views[i], 'utf-8')), function (
 key, val) {
-            if (typeof val === &#x27;function&#x27;) {
+            if (typeof val === 'function') {
                 return val.<span class="apidocCodeKeywordSpan">toString</span>();
             }
             return val;
@@ -1036,17 +1029,17 @@ key, val) {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">couchData = function (config, data) {
-    var server = require(&#x27;./utils&#x27;).getCouchDB(config.couch),
-        Q = require(&#x27;q&#x27;),
+    var server = require('./utils').getCouchDB(config.couch),
+        Q = require('q'),
         dfd = Q.defer();
 
     var db = null,
         log = config.log;
 
     db = server.use(config.couch.database);
-    log.debug(&#x27;Saving data&#x27;);
+    log.debug('Saving data');
 
-    if (typeof data === &#x27;undefined&#x27;) {
+    if (typeof data === 'undefined') {
         return;
     }
 
@@ -1061,10 +1054,10 @@ key, val) {
                 browser: val._browser || val._browserName,
                 run: config.run || config.time,
                 time: config.time,
-                type: &#x27;perfData&#x27;
+                type: 'perfData'
             };
             for (var key in res.data) {
-                if (key.indexOf(&#x27;_&#x27;) === 0) {
+                if (key.indexOf('_') === 0) {
                     res.meta[key] = res.data[key];
                     delete res.data[key];
                 }
@@ -1074,7 +1067,7 @@ key, val) {
     }, {
         new_edits: true
     }, function (err, res) {
-        log.debug(&#x27;Got result back after saving data&#x27;);
+        log.debug('Got result back after saving data');
         err ? dfd.reject(err) : dfd.resolve(res);
     });
 
@@ -1099,39 +1092,39 @@ key, val) {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">couchSite = function (config) {
 
-    var Q = require(&#x27;q&#x27;);
+    var Q = require('q');
 
     if (!config.couch.updateSite) {
         return Q(1); // jshint ignore:line
     }
 
-    var path = require(&#x27;path&#x27;),
+    var path = require('path'),
         log = config.log;
 
-    var siteDest = path.join(__dirname, &#x27;../bin-site&#x27;),
-        server = require(&#x27;./utils&#x27;).getCouchDB(config.couch),
+    var siteDest = path.join(__dirname, '../bin-site'),
+        server = require('./utils').getCouchDB(config.couch),
         db = server.use(config.couch.database);
 
-    var mime = require(&#x27;./mime&#x27;);
+    var mime = require('./mime');
 
     function contentType(filename) {
         var contentType = path.extname(filename);
-        if (contentType.length &#x3e; 0) {
+        if (contentType.length &gt; 0) {
             return mime[contentType.substring(1)];
         } else {
-            return &#x27;text&#x27;;
+            return 'text';
         }
     }
 
     function readFileContents(files, siteDest) {
-        var fs = require(&#x27;fs&#x27;),
-            path = require(&#x27;path&#x27;);
+        var fs = require('fs'),
+            path = require('path');
 
         var dfd = Q.defer();
         var fileContents = [];
 
         (function readFile(i) {
-            if (i &#x3c; files.length) {
+            if (i &lt; files.length) {
                 fs.readFile(path.join(siteDest, files[i]), function (err, data) {
                     if (!err) {
                         fileContents.push({
@@ -1144,7 +1137,7 @@ key, val) {
                     readFile(i + 1);
                 });
             } else {
-                log.debug(&#x27;Completed reading all files&#x27;);
+                log.debug('Completed reading all files');
                 dfd.resolve(fileContents);
             }
         }(0));
@@ -1154,9 +1147,9 @@ key, val) {
 
     function removeSite() {
         var dfd = Q.defer();
-        db.get(&#x27;_design/site&#x27;, function (err, res) {
+        db.get('_design/site', function (err, res) {
             if (!err) {
-                db.destroy(&#x27;_design/site&#x27;, res._rev, function (err, res) {
+                db.destroy('_design/site', res._rev, function (err, res) {
                     if (err) {
                         dfd.reject(err);
                     } else {
@@ -1171,17 +1164,17 @@ key, val) {
     }
 
     return removeSite().then(function () {
-        return Q.nfcall(require(&#x27;glob&#x27;), &#x27;**/*.*&#x27;, {
+        return Q.nfcall(require('glob'), '**/*.*', {
             cwd: siteDest
         });
     }).then(function (files) {
         return readFileContents(files, siteDest);
     }).then(function (fileContents) {
-        return Q.ninvoke(db.multipart, &#x27;insert&#x27;, {}, fileContents, &#x27;_design/site&#x27;);
+        return Q.ninvoke(db.multipart, 'insert', {}, fileContents, '_design/site');
     }).then(function () {
-        var link = url.parse([config.couch.server, config.couch.database, &#x27;_design/site/index.html&#x27;].join(&#x27;/&#x27;));
+        var link = url.parse([config.couch.server, config.couch.database, '_design/site/index.html'].join('/'));
         link.auth = null;
-        log.info(&#x27;Site Updated. View graphs at &#x27; + url.format(link));
+        log.info('Site Updated. View graphs at ' + url.format(link));
     });
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -1207,7 +1200,7 @@ key, val) {
     }
 
     var log = config.log,
-        server = require(&#x27;./utils&#x27;).getCouchDB(config.couch),
+        server = require('./utils').getCouchDB(config.couch),
         db = server.use(config.couch.database);
 
     return uploadViews(db, log);
@@ -1230,21 +1223,21 @@ key, val) {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">init = function (config) {
-    var Q = require(&#x27;q&#x27;),
-        server = require(&#x27;./utils&#x27;).getCouchDB(config.couch),
+    var Q = require('q'),
+        server = require('./utils').getCouchDB(config.couch),
         log = config.log;
 
-    log.debug(&#x27;Trying to see if the database exists&#x27;);
+    log.debug('Trying to see if the database exists');
 
-    return Q.ninvoke(server.db, &#x27;get&#x27;, config.couch.database).catch(function (err) {
-        log.debug(&#x27;Could not find database: %s\nCreating a new database %s&#x27;, err.reason, config.couch.database);
-        return Q.ninvoke(server.db, &#x27;create&#x27;, config.couch.database);
+    return Q.ninvoke(server.db, 'get', config.couch.database).catch(function (err) {
+        log.debug('Could not find database: %s\nCreating a new database %s', err.reason, config.couch.database);
+        return Q.ninvoke(server.db, 'create', config.couch.database);
     }).then(function () {
         var db = server.use(config.couch.database);
-        return Q.ninvoke(db, &#x27;get&#x27;, &#x27;version&#x27;).catch(function (err) {
-            return Q.ninvoke(db, &#x27;insert&#x27;, {
-                version: require(&#x27;../package.json&#x27;).dbVersion
-            }, &#x27;version&#x27;);
+        return Q.ninvoke(db, 'get', 'version').catch(function (err) {
+            return Q.ninvoke(db, 'insert', {
+                version: require('../package.json').dbVersion
+            }, 'version');
         });
     });
 }</pre></li>
@@ -1266,19 +1259,19 @@ key, val) {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">metricsgen = function (grunt) {
-	grunt.registerMultiTask(&#x27;metricsgen&#x27;, &#x27;Generates the names of metrics&#x27;, function() {
+	grunt.registerMultiTask('metricsgen', 'Generates the names of metrics', function() {
 		var apiDocs = new browserPerf.docs();
 		var regex = /(_avg|_max|_count)$/;
 		var doc = {};
 
 		for (var key in apiDocs.metrics) {
 			var modifier = null;
-			if (apiDocs.metrics[key].source === &#x27;TimelineMetrics&#x27; &#x26;&#x26; key.match(regex)) {
-				var idx = key.lastIndexOf(&#x27;_&#x27;);
+			if (apiDocs.metrics[key].source === 'TimelineMetrics' &amp;&amp; key.match(regex)) {
+				var idx = key.lastIndexOf('_');
 				modifier = key.substr(idx + 1);
 				key = key.substr(0, idx);
 			}
-			if (typeof doc[key] === &#x27;undefined&#x27;) {
+			if (typeof doc[key] === 'undefined') {
 				doc[key] = apiDocs.metrics[key] || {};
 				doc[key].stats = [];
 			}
@@ -1294,7 +1287,7 @@ key, val) {
 		}
 
 		this.files.forEach(function(file) {
-			grunt.file.write(file.dest, [&#x27;var METRICS_LIST =&#x27;, JSON.stringify(metrics)].join(&#x27;&#x27;));
+			grunt.file.write(file.dest, ['var METRICS_LIST =', JSON.stringify(metrics)].join(''));
 		});
 	});
 }</pre></li>
@@ -1319,7 +1312,7 @@ key, val) {
 	var log = config.log;
 
 	return utility.forEachDoc(oldDb, newDb, function(doc) {
-		if (doc.type !== &#x27;perfData&#x27;) {
+		if (doc.type !== 'perfData') {
 			return null;
 		}
 		delete doc._id;
@@ -1332,8 +1325,8 @@ key, val) {
 		}
 
 		doc.data[events[0]] = 0;
-		for (var i = 1; i &#x3c; events.length; i++) {
-			if (typeof doc.data[events[i]] === &#x27;undefined&#x27;) {
+		for (var i = 1; i &lt; events.length; i++) {
+			if (typeof doc.data[events[i]] === 'undefined') {
 				doc.data[events[i]] = 0;
 			}
 			doc.data[events[i]] = doc.data[events[i]] + doc.data[events[i - 1]];
@@ -1363,17 +1356,17 @@ key, val) {
 	var log = config.log;
 
 	return utility.forEachDoc(oldDb, newDb, function(doc) {
-		if (doc.type !== &#x27;perfData&#x27;) {
+		if (doc.type !== 'perfData') {
 			return null;
 		}
 		delete doc._id;
 		delete doc._rev;
 
 		for (var key in doc.data) {
-			if (typeof doc.data.mean_frame_time === &#x27;number&#x27;) { // From TracingMetrics
+			if (typeof doc.data.mean_frame_time === 'number') { // From TracingMetrics
 				doc.data.frames_per_sec = 1000 / doc.data.mean_frame_time;
 			}
-			if (typeof doc.data.meanFrameTime === &#x27;number&#x27;) { // from RAF
+			if (typeof doc.data.meanFrameTime === 'number') { // from RAF
 				doc.data.framesPerSec_raf = 1000 / doc.data.meanFrameTime;
 
 			}
@@ -1403,7 +1396,7 @@ key, val) {
 	var log = config.log;
 
 	return utility.forEachDoc(oldDb, newDb, function(doc) {
-		if (doc.type !== &#x27;perfData&#x27;) {
+		if (doc.type !== 'perfData') {
 			return null;
 		}
 		delete doc._id;
@@ -1413,17 +1406,17 @@ key, val) {
 
 		var metrics = new Metrics(doc.data);
 
-		metrics.addMetric(&#x27;loadTime&#x27;, &#x27;loadEventEnd&#x27;, &#x27;fetchStart&#x27;);
-		metrics.addMetric(&#x27;domReadyTime&#x27;, &#x27;domComplete&#x27;, &#x27;domInteractive&#x27;);
-		metrics.addMetric(&#x27;readyStart&#x27;, &#x27;fetchStart&#x27;, &#x27;navigationStart&#x27;);
-		metrics.addMetric(&#x27;redirectTime&#x27;, &#x27;redirectEnd&#x27;, &#x27;redirectStart&#x27;);
-		metrics.addMetric(&#x27;appcacheTime&#x27;, &#x27;domainLookupStart&#x27;, &#x27;fetchStart&#x27;);
-		metrics.addMetric(&#x27;unloadEventTime&#x27;, &#x27;unloadEventEnd&#x27;, &#x27;unloadEventStart&#x27;);
-		metrics.addMetric(&#x27;domainLookupTime&#x27;, &#x27;domainLookupEnd&#x27;, &#x27;domainLookupStart&#x27;);
-		metrics.addMetric(&#x27;connectTime&#x27;, &#x27;connectEnd&#x27;, &#x27;connectStart&#x27;);
-		metrics.addMetric(&#x27;requestTime&#x27;, &#x27;responseEnd&#x27;, &#x27;requestStart&#x27;);
-		metrics.addMetric(&#x27;initDomTreeTime&#x27;, &#x27;domInteractive&#x27;, &#x27;responseEnd&#x27;);
-		metrics.addMetric(&#x27;loadEventTime&#x27;, &#x27;loadEventEnd&#x27;, &#x27;loadEventStart&#x27;);
+		metrics.addMetric('loadTime', 'loadEventEnd', 'fetchStart');
+		metrics.addMetric('domReadyTime', 'domComplete', 'domInteractive');
+		metrics.addMetric('readyStart', 'fetchStart', 'navigationStart');
+		metrics.addMetric('redirectTime', 'redirectEnd', 'redirectStart');
+		metrics.addMetric('appcacheTime', 'domainLookupStart', 'fetchStart');
+		metrics.addMetric('unloadEventTime', 'unloadEventEnd', 'unloadEventStart');
+		metrics.addMetric('domainLookupTime', 'domainLookupEnd', 'domainLookupStart');
+		metrics.addMetric('connectTime', 'connectEnd', 'connectStart');
+		metrics.addMetric('requestTime', 'responseEnd', 'requestStart');
+		metrics.addMetric('initDomTreeTime', 'domInteractive', 'responseEnd');
+		metrics.addMetric('loadEventTime', 'loadEventEnd', 'loadEventStart');
 
 		return doc;
 	});
@@ -1449,14 +1442,14 @@ key, val) {
 	var noop = function() {};
 	config.log = config.log || config.logger || noop;
 
-	if (typeof config.log === &#x27;function&#x27;) {
+	if (typeof config.log === 'function') {
 		config.log = {
-			&#x27;fatal&#x27;: config.log,
-			&#x27;error&#x27;: config.log,
-			&#x27;warn&#x27;: config.log,
-			&#x27;info&#x27;: config.log,
-			&#x27;debug&#x27;: config.log,
-			&#x27;trace&#x27;: config.log
+			'fatal': config.log,
+			'error': config.log,
+			'warn': config.log,
+			'info': config.log,
+			'debug': config.log,
+			'trace': config.log
 		};
 	}
 
@@ -1466,32 +1459,32 @@ key, val) {
 		}
 	}
 	config.selenium = config.selenium || {
-		hostname: &#x27;localhost&#x27;,
+		hostname: 'localhost',
 		port: 4444
 	};
 	config.repeat = config.repeat || 1;
 	config.name = config.name || config.url;
-	config.suite = config.suite || &#x27;Default Test Suite&#x27;;
+	config.suite = config.suite || 'Default Test Suite';
 
-	if (typeof config.callback !== &#x27;function&#x27;) {
+	if (typeof config.callback !== 'function') {
 		config.callback = noop;
 	}
 
-	if (typeof config.couch === &#x27;undefined&#x27;) {
+	if (typeof config.couch === 'undefined') {
 		config.couch = {};
 	}
 
-	if (typeof config.couch.username !== &#x27;undefined&#x27;) {
-		var url = require(&#x27;url&#x27;);
+	if (typeof config.couch.username !== 'undefined') {
+		var url = require('url');
 		var href = url.parse(config.couch.server);
-		href.auth = config.couch.username + &#x27;:&#x27; + config.couch.pwd;
+		href.auth = config.couch.username + ':' + config.couch.pwd;
 		config.couch.server = url.format(href);
 	}
-	assert(typeof config.couch.server !== &#x27;undefined&#x27;, &#x27;Location to save results is not defined. Please define a couchDB server&#x27;);
+	assert(typeof config.couch.server !== 'undefined', 'Location to save results is not defined. Please define a couchDB server');
 
 	config.couch.database = config.couch.db || config.couch.database;
-	assert(typeof config.couch.server !== &#x27;undefined&#x27;, &#x27;Location to save results is not defined. Please define a Database to save the
- results&#x27;);
+	assert(typeof config.couch.server !== 'undefined', 'Location to save results is not defined. Please define a Database to save the
+ results');
 	return config;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
@@ -1499,9 +1492,9 @@ key, val) {
 
 
 module.exports = function(grunt) {
-grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance test cases&#x27;, function() {
+grunt.registerMultiTask('perfjankie', 'Run rendering performance test cases', function() {
   var done = this.async(),
-    path = require(&#x27;path&#x27;),
+    path = require('path'),
     options = this.<span class="apidocCodeKeywordSpan">options</span>({
       log: { // Expects the following methods,
         fatal: grunt.fail.fatal.bind(grunt.fail),
@@ -1528,21 +1521,21 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">perfTests = function (config) {
-	var Q = require(&#x27;q&#x27;),
+	var Q = require('q'),
 		dfd = Q.defer();
 
 	if (config.couch.onlyUpdateSite) {
 		dfd.resolve();
 	} else {
-		var browserPerf = config.browserPerf || require(&#x27;browser-perf&#x27;),
+		var browserPerf = config.browserPerf || require('browser-perf'),
 			log = config.log;
 
-		log.debug(&#x27;Starting Browser Perf&#x27;);
+		log.debug('Starting Browser Perf');
 		browserPerf(config.url, function(err, results) {
 			if (err) {
 				dfd.reject(err);
 			} else {
-				log.debug(&#x27;Got Browser Perf results back, now saving the results&#x27;);
+				log.debug('Got Browser Perf results back, now saving the results');
 				dfd.resolve(results);
 			}
 		}, {
@@ -1579,9 +1572,9 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">task = function (grunt) {
-  grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance test cases&#x27;, function() {
+  grunt.registerMultiTask('perfjankie', 'Run rendering performance test cases', function() {
     var done = this.async(),
-      path = require(&#x27;path&#x27;),
+      path = require('path'),
       options = this.options({
         log: { // Expects the following methods,
           fatal: grunt.fail.fatal.bind(grunt.fail),
@@ -1597,16 +1590,16 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
 
     options.time = parseFloat(options.time, 10);
     if (options.sauceTunnel) {
-      var SauceTunnel = require(&#x27;sauce-tunnel&#x27;);
-      grunt.log.writeln(&#x27;Starting Saucelabs Tunnel&#x27;);
+      var SauceTunnel = require('sauce-tunnel');
+      grunt.log.writeln('Starting Saucelabs Tunnel');
       var tunnel = new SauceTunnel(options.SAUCE_USERNAME, options.SAUCE_ACCESSKEY, options.sauceTunnel, true);
       tunnel.start(function(status) {
-        grunt.log.ok(&#x27;Saucelabs Tunnel started - &#x27; + status);
+        grunt.log.ok('Saucelabs Tunnel started - ' + status);
         if (status === false) {
           done(false);
         } else {
           runPerfTest(files, options, function(res) {
-            grunt.verbose.writeln(&#x27;All perf tests completed&#x27;);
+            grunt.verbose.writeln('All perf tests completed');
             tunnel.stop(function() {
               done(res);
             });
@@ -1618,23 +1611,23 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
     }
   });
 
-  var perfjankie = require(&#x27;..&#x27;);
+  var perfjankie = require('..');
 
   var runPerfTest = function(files, options, cb) {
     var success = true;
     (function runTest(i) {
-      if (i &#x3c; files.length) {
-        grunt.log.writeln(&#x27;Testing File &#x27;, files[i]);
+      if (i &lt; files.length) {
+        grunt.log.writeln('Testing File ', files[i]);
         var config = {
           url: files[i],
-          name: files[i].replace(/(\S)*\/|\.html$/gi, &#x27;&#x27;),
+          name: files[i].replace(/(\S)*\/|\.html$/gi, ''),
           callback: function(err, res) {
             if (err) {
               success = false;
               console.log(res);
               grunt.log.warn(err);
             } else {
-              grunt.log.ok(&#x27;Saved performance metrics&#x27;);
+              grunt.log.ok('Saved performance metrics');
             }
             runTest(i + 1);
           }
@@ -1669,13 +1662,13 @@ grunt.registerMultiTask(&#x27;perfjankie&#x27;, &#x27;Run rendering performance 
     <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 
-log.debug(&#x27;Starting to upload views&#x27;);
+log.debug('Starting to upload views');
 (function uploadView(i) {
-    if (i &#x3c; views.length) {
-        log.debug(&#x27;Checking View &#x27; + views[i]);
-        var view = JSON.parse(JSON.stringify(eval(&#x27;_x_ = &#x27; + fs.readFileSync(views[i], &#x27;utf-8&#x27;)), function (
+    if (i &lt; views.length) {
+        log.debug('Checking View ' + views[i]);
+        var view = JSON.parse(JSON.stringify(eval('_x_ = ' + fs.readFileSync(views[i], 'utf-8')), function (
 key, val) {
-            if (typeof val === &#x27;function&#x27;) {
+            if (typeof val === 'function') {
                 return val.<span class="apidocCodeKeywordSpan">toString</span>();
             }
             return val;
@@ -1705,7 +1698,7 @@ key, val) {
 		function processBatch(skip) {
 			skip = skip || 0;
 			var count = 0;
-			return Q.ninvoke(oldDb, &#x27;get&#x27;, &#x27;_all_docs&#x27;, {
+			return Q.ninvoke(oldDb, 'get', '_all_docs', {
 				limit: MAX_LIMIT,
 				skip: skip,
 				include_docs: true
@@ -1715,7 +1708,7 @@ key, val) {
 					return callback(data.doc);
 				});
 			}).then(function(results) {
-				return Q.ninvoke(newDb, &#x27;bulk&#x27;, {
+				return Q.ninvoke(newDb, 'bulk', {
 					docs: results.filter(function(val) {
 						return val !== null;
 					})
@@ -1723,7 +1716,7 @@ key, val) {
 					new_edits: true
 				});
 			}).then(function() {
-				if (count &#x3e;= MAX_LIMIT) {
+				if (count &gt;= MAX_LIMIT) {
 					return processBatch(skip + MAX_LIMIT);
 				} else {
 					return Q();
@@ -1734,15 +1727,15 @@ key, val) {
 		return processBatch();
 	}</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-var Q = require(&#x27;q&#x27;);
+var Q = require('q');
 
-var utility = require(&#x27;./utility&#x27;);
+var utility = require('./utility');
 
 module.exports = function(oldDb, newDb, config) {
 	var log = config.log;
 
 	return utility.<span class="apidocCodeKeywordSpan">forEachDoc</span>(oldDb, newDb, function(doc) {
-		if (doc.type !== &#x27;perfData&#x27;) {
+		if (doc.type !== 'perfData') {
 			return null;
 		}
 		delete doc._id;
@@ -1771,14 +1764,14 @@ module.exports = function(oldDb, newDb, config) {
         server;
     if (options.requestOptions) {
         server = nano({
-            &#x22;url&#x22;: serverUrl,
-            &#x22;parseUrl&#x22;: false,
-            &#x22;requestDefaults&#x22;: options.requestOptions
+            "url": serverUrl,
+            "parseUrl": false,
+            "requestDefaults": options.requestOptions
         });
     } else {
         server = nano({
-            &#x22;url&#x22;: serverUrl,
-            &#x22;parseUrl&#x22;: false
+            "url": serverUrl,
+            "parseUrl": false
         });
     }
     return server;
@@ -1791,8 +1784,8 @@ module.exports = function(oldDb, newDb, config) {
 
 
 module.exports = function (config, data) {
-var server = require(&#x27;./utils&#x27;).<span class="apidocCodeKeywordSpan">getCouchDB</span>(config.couch),
-    Q = require(&#x27;q&#x27;),
+var server = require('./utils').<span class="apidocCodeKeywordSpan">getCouchDB</span>(config.couch),
+    Q = require('q'),
     dfd = Q.defer();
 
 var db = null,
@@ -1811,3 +1804,4 @@ db = server.use(config.couch.database);
     ]
 </div>
 </div>
+</body></html>
