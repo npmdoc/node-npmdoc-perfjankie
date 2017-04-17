@@ -1,9 +1,11 @@
 # api documentation for  [perfjankie (v2.1.2)](https://github.com/axemclion/perfjankie#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-perfjankie.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-perfjankie) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-perfjankie.svg)](https://travis-ci.org/npmdoc/node-npmdoc-perfjankie)
 #### Browser Performance regression suite
 
-[![NPM](https://nodei.co/npm/perfjankie.png?downloads=true)](https://www.npmjs.com/package/perfjankie)
+[![NPM](https://nodei.co/npm/perfjankie.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/perfjankie)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-perfjankie/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-perfjankie_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-perfjankie/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-perfjankie/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-perfjankie/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-perfjankie/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-perfjankie/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-perfjankie/build/screenCapture.npmPackageListing.svg)
 
@@ -17,8 +19,7 @@
 
 {
     "author": {
-        "name": "Parashuram",
-        "email": "code@nparashuram.com"
+        "name": "Parashuram"
     },
     "bin": {
         "perfjankie": "lib/cli.js",
@@ -82,13 +83,11 @@
     "main": "lib/index.js",
     "maintainers": [
         {
-            "name": "axemclion",
-            "email": "code@r.nparashuram.com"
+            "name": "axemclion"
         }
     ],
     "name": "perfjankie",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git://github.com/axemclion/perfjankie.git"
@@ -99,131 +98,6 @@
     },
     "version": "2.1.2"
 }
-```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module perfjankie](#apidoc.module.perfjankie)
-1.  object <span class="apidocSignatureSpan">perfjankie.</span>utility
-1.  object <span class="apidocSignatureSpan">perfjankie.</span>utils
-
-#### [module perfjankie.utility](#apidoc.module.perfjankie.utility)
-1.  [function <span class="apidocSignatureSpan">perfjankie.utility.</span>forEachDoc (oldDb, newDb, callback)](#apidoc.element.perfjankie.utility.forEachDoc)
-
-#### [module perfjankie.utils](#apidoc.module.perfjankie.utils)
-1.  [function <span class="apidocSignatureSpan">perfjankie.utils.</span>getCouchDB (options)](#apidoc.element.perfjankie.utils.getCouchDB)
-
-
-
-# <a name="apidoc.module.perfjankie"></a>[module perfjankie](#apidoc.module.perfjankie)
-
-
-
-# <a name="apidoc.module.perfjankie.utility"></a>[module perfjankie.utility](#apidoc.module.perfjankie.utility)
-
-#### <a name="apidoc.element.perfjankie.utility.forEachDoc"></a>[function <span class="apidocSignatureSpan">perfjankie.utility.</span>forEachDoc (oldDb, newDb, callback)](#apidoc.element.perfjankie.utility.forEachDoc)
-- description and source-code
-```javascript
-forEachDoc = function (oldDb, newDb, callback) {
-		function processBatch(skip) {
-			skip = skip || 0;
-			var count = 0;
-			return Q.ninvoke(oldDb, 'get', '_all_docs', {
-				limit: MAX_LIMIT,
-				skip: skip,
-				include_docs: true
-			}).then(function(docs) {
-				count = docs[0].rows.length;
-				return result = docs[0].rows.map(function(data) {
-					return callback(data.doc);
-				});
-			}).then(function(results) {
-				return Q.ninvoke(newDb, 'bulk', {
-					docs: results.filter(function(val) {
-						return val !== null;
-					})
-				}, {
-					new_edits: true
-				});
-			}).then(function() {
-				if (count >= MAX_LIMIT) {
-					return processBatch(skip + MAX_LIMIT);
-				} else {
-					return Q();
-				}
-			});
-		}
-
-		return processBatch();
-	}
-```
-- example usage
-```shell
-...
-var Q = require('q');
-
-var utility = require('./utility');
-
-module.exports = function(oldDb, newDb, config) {
-	var log = config.log;
-
-	return utility.forEachDoc(oldDb, newDb, function(doc) {
-		if (doc.type !== 'perfData') {
-			return null;
-		}
-		delete doc._id;
-		delete doc._rev;
-		doc.url = null;
-		doc.browser = doc.meta._browserName || null;
-...
-```
-
-
-
-# <a name="apidoc.module.perfjankie.utils"></a>[module perfjankie.utils](#apidoc.module.perfjankie.utils)
-
-#### <a name="apidoc.element.perfjankie.utils.getCouchDB"></a>[function <span class="apidocSignatureSpan">perfjankie.utils.</span>getCouchDB (options)](#apidoc.element.perfjankie.utils.getCouchDB)
-- description and source-code
-```javascript
-getCouchDB = function (options) {
-    var serverUrl = options.server,
-        server;
-    if (options.requestOptions) {
-        server = nano({
-            "url": serverUrl,
-            "parseUrl": false,
-            "requestDefaults": options.requestOptions
-        });
-    } else {
-        server = nano({
-            "url": serverUrl,
-            "parseUrl": false
-        });
-    }
-    return server;
-}
-```
-- example usage
-```shell
-...
-
-
-
-
-
-
-module.exports = function (config, data) {
-var server = require('./utils').getCouchDB(config.couch),
-    Q = require('q'),
-    dfd = Q.defer();
-
-var db = null,
-    log = config.log;
-
-db = server.use(config.couch.database);
-...
 ```
 
 
