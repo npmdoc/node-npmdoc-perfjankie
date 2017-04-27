@@ -1,6 +1,6 @@
 # npmdoc-perfjankie
 
-#### api documentation for  perfjankie (v2.1.2)  [![npm package](https://img.shields.io/npm/v/npmdoc-perfjankie.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-perfjankie) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-perfjankie.svg)](https://travis-ci.org/npmdoc/node-npmdoc-perfjankie)
+#### basic api documentation for  [perfjankie (v2.1.2)](https://github.com/axemclion/perfjankie#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-perfjankie.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-perfjankie) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-perfjankie.svg)](https://travis-ci.org/npmdoc/node-npmdoc-perfjankie)
 
 #### Browser Performance regression suite
 
@@ -21,21 +21,17 @@
 ```json
 
 {
-    "name": "perfjankie",
-    "version": "2.1.2",
-    "dbVersion": "0.4.0",
-    "description": "Browser Performance regression suite",
-    "main": "lib/index.js",
-    "scripts": {
-        "test": "grunt test",
-        "prepublish": "grunt clean dist"
+    "author": {
+        "name": "Parashuram"
     },
     "bin": {
         "perfjankie": "lib/cli.js",
         "perfjankie-dbmigrate": "migrations/cli.js"
     },
-    "author": "Parashuram <code@nparashuram.com>",
-    "license": "BSD-2-Clause",
+    "bugs": {
+        "url": "https://github.com/axemclion/perfjankie/issues"
+    },
+    "dbVersion": "0.4.0",
     "dependencies": {
         "browser-perf": "~1.4.0",
         "commander": "~2.8.1",
@@ -46,6 +42,7 @@
         "semver": "^5.0.1",
         "serve-static": "^1.10.0"
     },
+    "description": "Browser Performance regression suite",
     "devDependencies": {
         "bunyan": "~1.5.1",
         "chai": "~3.2.0",
@@ -71,21 +68,38 @@
         "selenium-server": "^2.53.0",
         "sinon": "~1.15.4"
     },
+    "directories": {
+        "test": "test"
+    },
+    "dist": {
+        "shasum": "9034ef20cc7390848e157c890ab2034689b6dcd6",
+        "tarball": "https://registry.npmjs.org/perfjankie/-/perfjankie-2.1.2.tgz"
+    },
+    "gitHead": "14ae57f350d76c3452bcc9ed218787202f9ddc45",
+    "homepage": "https://github.com/axemclion/perfjankie#readme",
     "keywords": [
         "browser-perf",
         "telemetry",
         "gruntplugin"
     ],
-    "directories": {
-        "test": "test"
-    },
+    "license": "BSD-2-Clause",
+    "main": "lib/index.js",
+    "maintainers": [
+        {
+            "name": "axemclion"
+        }
+    ],
+    "name": "perfjankie",
+    "optionalDependencies": {},
     "repository": {
         "type": "git",
         "url": "git://github.com/axemclion/perfjankie.git"
     },
-    "bugs": {
-        "url": "https://github.com/axemclion/perfjankie/issues"
-    }
+    "scripts": {
+        "prepublish": "grunt clean dist",
+        "test": "grunt test"
+    },
+    "version": "2.1.2"
 }
 ```
 
