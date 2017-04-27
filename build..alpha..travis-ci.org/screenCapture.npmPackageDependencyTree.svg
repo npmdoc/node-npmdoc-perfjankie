@@ -1,5 +1,5 @@
-<svg height="3086" width="720" xmlns="http://www.w3.org/2000/svg">
-<rect height="3086" fill="#555" width="720"></rect>
+<svg height="3102" width="720" xmlns="http://www.w3.org/2000/svg">
+<rect height="3102" fill="#555" width="720"></rect>
 <text fill="#7f7" font-family="Courier New" font-size="12" xml:space="preserve">
 <tspan x="10" y="26">56 megabytes installed</tspan>
 <tspan x="10" y="42"></tspan>
@@ -10,7 +10,7 @@
 <tspan x="10" y="122">  │ ├─┬ cli-table@0.3.1 </tspan>
 <tspan x="10" y="138">  │ │ └── colors@1.0.3 </tspan>
 <tspan x="10" y="154">  │ ├── commander@2.9.0 </tspan>
-<tspan x="10" y="170">  │ ├─┬ debug@2.6.4 </tspan>
+<tspan x="10" y="170">  │ ├─┬ debug@2.6.5 </tspan>
 <tspan x="10" y="186">  │ │ └── ms@0.7.3 </tspan>
 <tspan x="10" y="202">  │ ├─┬ event-stream@3.3.4 </tspan>
 <tspan x="10" y="218">  │ │ ├── duplexer@0.1.1 </tspan>
@@ -59,7 +59,7 @@
 <tspan x="10" y="906">  │ │ │   ├─┬ dashdash@1.14.1 </tspan>
 <tspan x="10" y="922">  │ │ │   │ └── assert-plus@1.0.0 </tspan>
 <tspan x="10" y="938">  │ │ │   ├── ecc-jsbn@0.1.1 </tspan>
-<tspan x="10" y="954">  │ │ │   ├─┬ getpass@0.1.6 </tspan>
+<tspan x="10" y="954">  │ │ │   ├─┬ getpass@0.1.7 </tspan>
 <tspan x="10" y="970">  │ │ │   │ └── assert-plus@1.0.0 </tspan>
 <tspan x="10" y="986">  │ │ │   ├── jodid25519@1.0.2 </tspan>
 <tspan x="10" y="1002">  │ │ │   ├── jsbn@0.1.1 </tspan>
@@ -174,23 +174,24 @@
 <tspan x="10" y="2746">  │ │ └── supports-color@2.0.0 </tspan>
 <tspan x="10" y="2762">  │ └── split@1.0.0 </tspan>
 <tspan x="10" y="2778">  ├── semver@5.3.0 </tspan>
-<tspan x="10" y="2794">  └─┬ serve-static@1.12.1 </tspan>
+<tspan x="10" y="2794">  └─┬ serve-static@1.12.2 </tspan>
 <tspan x="10" y="2810">    ├── encodeurl@1.0.1 </tspan>
 <tspan x="10" y="2826">    ├── escape-html@1.0.3 </tspan>
 <tspan x="10" y="2842">    ├── parseurl@1.3.1 </tspan>
-<tspan x="10" y="2858">    └─┬ send@0.15.1 </tspan>
-<tspan x="10" y="2874">      ├── debug@2.6.1 </tspan>
-<tspan x="10" y="2890">      ├── depd@1.1.0 </tspan>
-<tspan x="10" y="2906">      ├── destroy@1.0.4 </tspan>
-<tspan x="10" y="2922">      ├── etag@1.8.0 </tspan>
-<tspan x="10" y="2938">      ├── fresh@0.5.0 </tspan>
-<tspan x="10" y="2954">      ├─┬ http-errors@1.6.1 </tspan>
-<tspan x="10" y="2970">      │ └── setprototypeof@1.0.3 </tspan>
-<tspan x="10" y="2986">      ├── mime@1.3.4 </tspan>
-<tspan x="10" y="3002">      ├── ms@0.7.2 </tspan>
-<tspan x="10" y="3018">      ├─┬ on-finished@2.3.0 </tspan>
-<tspan x="10" y="3034">      │ └── ee-first@1.1.1 </tspan>
-<tspan x="10" y="3050">      ├── range-parser@1.2.0 </tspan>
-<tspan x="10" y="3066">      └── statuses@1.3.1</tspan>
+<tspan x="10" y="2858">    └─┬ send@0.15.2 </tspan>
+<tspan x="10" y="2874">      ├─┬ debug@2.6.4 </tspan>
+<tspan x="10" y="2890">      │ └── ms@0.7.3 </tspan>
+<tspan x="10" y="2906">      ├── depd@1.1.0 </tspan>
+<tspan x="10" y="2922">      ├── destroy@1.0.4 </tspan>
+<tspan x="10" y="2938">      ├── etag@1.8.0 </tspan>
+<tspan x="10" y="2954">      ├── fresh@0.5.0 </tspan>
+<tspan x="10" y="2970">      ├─┬ http-errors@1.6.1 </tspan>
+<tspan x="10" y="2986">      │ └── setprototypeof@1.0.3 </tspan>
+<tspan x="10" y="3002">      ├── mime@1.3.4 </tspan>
+<tspan x="10" y="3018">      ├── ms@1.0.0 </tspan>
+<tspan x="10" y="3034">      ├─┬ on-finished@2.3.0 </tspan>
+<tspan x="10" y="3050">      │ └── ee-first@1.1.1 </tspan>
+<tspan x="10" y="3066">      ├── range-parser@1.2.0 </tspan>
+<tspan x="10" y="3082">      └── statuses@1.3.1</tspan>
 </text>
 </svg>

@@ -49,6 +49,8 @@
 <h1>api documentation for
     <a
 
+        href="https://github.com/axemclion/perfjankie#readme"
+
     >perfjankie (v2.1.2)</a>
 </h1>
 <h4>Browser Performance regression suite</h4>
@@ -74,12 +76,6 @@
 
         </li>
 
-        <li>
-
-            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">perfjankie.</span>utils</span>
-
-        </li>
-
     </ol></li>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.perfjankie.utility">module perfjankie.utility</a><ol>
@@ -89,19 +85,6 @@
             <a class="apidocElementLiA" href="#apidoc.element.perfjankie.utility.forEachDoc">
             function <span class="apidocSignatureSpan">perfjankie.utility.</span>forEachDoc
             <span class="apidocSignatureSpan">(oldDb, newDb, callback)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.perfjankie.utils">module perfjankie.utils</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.perfjankie.utils.getCouchDB">
-            function <span class="apidocSignatureSpan">perfjankie.utils.</span>getCouchDB
-            <span class="apidocSignatureSpan">(options)</span>
             </a>
 
         </li>
@@ -142,8 +125,6 @@
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
-
-
 
 
 
@@ -209,56 +190,6 @@ module.exports = function(oldDb, newDb, config) {
 		delete doc._rev;
 		doc.url = null;
 		doc.browser = doc.meta._browserName || null;
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.perfjankie.utils" id="apidoc.module.perfjankie.utils">module perfjankie.utils</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.perfjankie.utils.getCouchDB" id="apidoc.element.perfjankie.utils.getCouchDB">
-        function <span class="apidocSignatureSpan">perfjankie.utils.</span>getCouchDB
-        <span class="apidocSignatureSpan">(options)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">getCouchDB = function (options) {
-    var serverUrl = options.server,
-        server;
-    if (options.requestOptions) {
-        server = nano({
-            &#x22;url&#x22;: serverUrl,
-            &#x22;parseUrl&#x22;: false,
-            &#x22;requestDefaults&#x22;: options.requestOptions
-        });
-    } else {
-        server = nano({
-            &#x22;url&#x22;: serverUrl,
-            &#x22;parseUrl&#x22;: false
-        });
-    }
-    return server;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-
-
-
-
-
-
-module.exports = function (config, data) {
-var server = require(&#x27;./utils&#x27;).<span class="apidocCodeKeywordSpan">getCouchDB</span>(config.couch),
-    Q = require(&#x27;q&#x27;),
-    dfd = Q.defer();
-
-var db = null,
-    log = config.log;
-
-db = server.use(config.couch.database);
 ...</pre></li>
     </ul>
 
